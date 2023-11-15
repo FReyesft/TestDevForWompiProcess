@@ -61,7 +61,7 @@ export class AppComponent implements OnInit {
         console.log(this.wompiDataResponse)
         this.idLinkwompi = this.wompiDataResponse.idLinkWompi;
         const redirectUrl = `${this.urlWompiToPay}/${this.idLinkwompi}`;
-        sessionStorage.setItem('idWompiLink', JSON.stringify(this.idLinkwompi));
+        sessionStorage.setItem('idWompiLink', this.idLinkwompi);
         location.href = redirectUrl
       },
       (error) => {
@@ -69,10 +69,12 @@ export class AppComponent implements OnInit {
       }
     );
   }
-
+  count: number = 0
   getTransactionByIdLinkWompi() {
+
     this.intervalId = setInterval(() => {
-      this.wompiService.getTransactionByIdLinkWompi("test_lNZZjw").subscribe(
+      this.idLinkwompi = sessionStorage.getItem('idWompiLink');
+      this.wompiService.getTransactionByIdLinkWompi(this.idLinkwompi).subscribe(
         (resp) => {
           if (resp.transactionState) {
             this.transactionByIdResponse = {
@@ -80,7 +82,8 @@ export class AppComponent implements OnInit {
               idLinkWompi: resp.idLinkWompi,
               transactionState: resp.transactionState
             };
-
+            this.count += + 1
+            console.log('Petición numero: ' + this.count);
             const { data } = this.transactionByIdResponse.jsonWompiResponse;
 
             this.trasactionDetail = {
@@ -88,10 +91,6 @@ export class AppComponent implements OnInit {
               description: data.description,
               amount_in_cents: data.amount_in_cents
             };
-
-            console.log(this.trasactionDetail);
-            console.log(1);
-
             if (this.transactionByIdResponse.transactionState !== 'PENDING') {
               clearInterval(this.intervalId);
             }

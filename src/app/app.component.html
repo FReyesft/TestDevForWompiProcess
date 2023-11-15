@@ -1,8 +1,11 @@
 <section>
   <header>
-    <h1>Paga Con Wompi</h1>
+    <h1 style="margin-bottom: 20px">Paga Con Wompi</h1>
   </header>
-  <div class="form-container">
+  <div
+    class="form-container"
+    style="display: flex; flex-direction: column; align-items: center"
+  >
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
       <div class="container-input">
         <label for="name">Nombre:</label>
@@ -34,69 +37,70 @@
         </button>
       </div>
     </form>
-  </div>
-  <div
-    *ngIf="transactionByIdResponse != null"
-    style="
-      border: 1px solid #000;
-      padding: 30px;
-      text-align: center;
-      width: 350px;
-    "
-  >
-    <div class="containerStateOfTransaction">
-      <div *ngIf="transactionByIdResponse.transactionState === 'APPROVED'">
-        <h3 style="color: #1cb330">¡Transacción exítosa!</h3>
-        <div
-          class="transacción-detail"
-          style="
-            height: 200px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: flex-start;
-            margin-top: 20px;
+    <div
+      *ngIf="transactionByIdResponse != null"
+      style="
+        border-radius: 5px;
+        border: 3px dashed #000;
+        padding: 30px;
+        text-align: center;
+        width: 350px;
+      "
+    >
+      <div class="containerStateOfTransaction">
+        <div *ngIf="transactionByIdResponse.transactionState === 'APPROVED'">
+          <h3 style="color: #1cb330">¡Transacción exítosa!</h3>
+          <div
+            class="transacción-detail"
+            style="
+              height: 200px;
+              display: flex;
+              flex-direction: column;
+              align-items: flex-start;
+              justify-content: flex-start;
+              margin-top: 20px;
+            "
+          >
+            <span style="border-bottom: 1px solid #000"
+              >Nombre: {{ trasactionDetail.name }}</span
+            >
+            <br />
+            <span style="border-bottom: 1px solid #000"
+              >Descripción: {{ trasactionDetail.description }}</span
+            >
+            <br />
+            <span style="border-bottom: 1px solid #000"
+              >Total pagado:
+              {{ trasactionDetail.amount_in_cents / 100 | currency }}
+            </span>
+            <br />
+          </div>
+        </div>
+
+        <h3
+          *ngIf="transactionByIdResponse.transactionState === 'DECLINED'"
+          style="color: rgb(179, 25, 56)"
+        >
+          ¡Transacción Fallida!
+        </h3>
+        <h3
+          *ngIf="transactionByIdResponse.transactionState === 'PENDING'"
+          style="color: blueviolet"
+        >
+          Transacción en proceso... <br />
+          <span style="color: #000; font-size: 14px"
+            >puedes esperar hasta 24 horas, vuelve mas tarde</span
+          >
+        </h3>
+        <h3
+          *ngIf="
+            transactionByIdResponse.transactionState === 'VOIDED' ||
+            transactionByIdResponse.transactionState === 'ERROR'
           "
         >
-          <span style="border-bottom: 1px solid #000"
-            >Nombre: {{ trasactionDetail.name }}</span
-          >
-          <br />
-          <span style="border-bottom: 1px solid #000"
-            >Descripción: {{ trasactionDetail.description }}</span
-          >
-          <br />
-          <span style="border-bottom: 1px solid #000"
-            >Total pagado:
-            {{ trasactionDetail.amount_in_cents / 100 | currency }}
-          </span>
-          <br />
-        </div>
+          Ups, ¡¡ha ocurrido un error al realizar la transacción!!
+        </h3>
       </div>
-
-      <h3
-        *ngIf="transactionByIdResponse.transactionState === 'DECLINED'"
-        style="color: rgb(179, 25, 56)"
-      >
-        ¡Transacción Fallida!
-      </h3>
-      <h3
-        *ngIf="transactionByIdResponse.transactionState === 'PENDING'"
-        style="color: blueviolet"
-      >
-        Transacción en proceso... <br />
-        <span style="color: #000; font-size: 14px"
-          >puedes esperar hasta 24 horas, vuelve mas tarde</span
-        >
-      </h3>
-      <h3
-        *ngIf="
-          transactionByIdResponse.transactionState === 'VOIDED' ||
-          transactionByIdResponse.transactionState === 'ERROR'
-        "
-      >
-        Ups, ha ocurrido un error al realizar la transacción
-      </h3>
     </div>
   </div>
 </section>
